@@ -12,10 +12,17 @@
         tools:layout="@layout/fragment_home" >
         <action
             android:id="@+id/action_homeFragment_to_categoryFragment"
-            app:destination="@id/categoryFragment" />
+            app:destination="@id/categoryFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
         <action
             android:id="@+id/action_homeFragment_to_profileActivity"
-            app:destination="@id/profileActivity" />
+            app:destination="@id/profileActivity"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:launchSingleTop="true"/>
     </fragment>
     <fragment
         android:id="@+id/categoryFragment"
@@ -30,10 +37,35 @@
         android:id="@+id/profileActivity"
         android:name="com.raychal.fundamentalandroid.ProfileActivity"
         android:label="activity_profile"
-        tools:layout="@layout/activity_profile" />
+        tools:layout="@layout/activity_profile">
+        <!-- DeepLink -->
+        <deepLink
+            android:id="@+id/deepLink"
+            app:uri="https://www.dicoding.com/profile" />
+    </activity>
     <fragment
         android:id="@+id/detailCategoryFragment"
         android:name="com.raychal.fundamentalandroid.DetailCategoryFragment"
         android:label="fragment_detail_category"
-        tools:layout="@layout/fragment_detail_category" />
+        tools:layout="@layout/fragment_detail_category">
+        <!-- send data with SafeArg by passing the argument -->
+        <argument
+            android:name="name"
+            android:defaultValue="default name"
+            app:argType="string" />
+        <argument
+            android:name="stock"
+            android:defaultValue="0L"
+            app:argType="long" />
+        <!-- DeepLink with parameter data -->
+        <deepLink
+            android:id="@+id/deepLink2"
+            app:uri="https://www.dicoding.com/detail/{name}" />
+        <action
+            android:id="@+id/action_detailCategoryFragment_to_homeFragment"
+            app:destination="@id/homeFragment"
+            app:launchSingleTop="true"
+            app:popUpTo="@+id/homeFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
 </navigation>

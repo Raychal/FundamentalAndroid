@@ -5,42 +5,50 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import androidx.fragment.app.commit
 import androidx.navigation.findNavController
 import com.raychal.fundamentalandroid.databinding.FragmentCategoryBinding
 
-class CategoryFragment : Fragment() {
-
-    private var _binding: FragmentCategoryBinding? = null
-    private val binding get() = _binding!!
+class CategoryFragment : Fragment(),  View.OnClickListener  {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         // Inflate the layout for this fragment
-        _binding = FragmentCategoryBinding.inflate(inflater, container, false)
-        val view = binding.root
-        return view
+        return inflater.inflate(R.layout.fragment_category, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.btnCategoryLifestyle.setOnClickListener { view ->
+        val btnDetailCategory: Button = view.findViewById(R.id.btn_detail_category)
+        btnDetailCategory.setOnClickListener(this)
+    }
+
+    override fun onClick(v: View) {
+        if (v.id == R.id.btn_detail_category) {
+            val mDetailCategoryFragment = DetailCategoryFragment()
+
             val mBundle = Bundle()
-            mBundle.putString(EXTRA_NAME, "Lifestyle")
-            mBundle.putLong(EXTRA_STOCK, 7)
-            view.findNavController().navigate(R.id.action_categoryFragment_to_detailCategoryFragment, mBundle)
+            mBundle.putString(DetailCategoryFragment.EXTRA_NAME, "Lifestyle")
+            val description = "Kategori ini akan berisi produk-produk lifestyle"
+
+            mDetailCategoryFragment.arguments = mBundle
+            mDetailCategoryFragment.description = description
+
+            /*
+            Method addToBackStack akan menambahkan fragment ke backstack
+            Behaviour dari back button akan cek fragment dari backstack,
+            jika ada fragment di dalam backstack maka fragment yang akan di close / remove
+            jika sudah tidak ada fragment di dalam backstack maka activity yang akan di close / finish
+             */
+            val mFragmentManager = parentFragmentManager
+            mFragmentManager.commit {
+                addToBackStack(null)
+                replace(R.id.frame_container, mDetailCategoryFragment, DetailCategoryFragment::class.java.simpleName)
+            }
         }
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        _binding = null
-    }
-
-    companion object {
-        val EXTRA_NAME = "extra_name"
-        val EXTRA_STOCK = "extra_stock"
     }
 }

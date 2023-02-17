@@ -5,39 +5,44 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import androidx.fragment.app.commit
 import androidx.navigation.Navigation
 import androidx.navigation.findNavController
 import com.raychal.fundamentalandroid.databinding.FragmentHomeBinding
 
-class HomeFragment : Fragment() {
-
-    private var _binding: FragmentHomeBinding? = null
-    private val binding get() = _binding!!
+class HomeFragment : Fragment(), View.OnClickListener {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         // Inflate the layout for this fragment
-        _binding = FragmentHomeBinding.inflate(inflater, container, false)
-        val view = binding.root
-        return view
+        return inflater.inflate(R.layout.fragment_home, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.btnCategory.setOnClickListener(
-            Navigation.createNavigateOnClickListener(R.id.action_homeFragment_to_categoryFragment)
-        )
-        binding.btnProfile.setOnClickListener { view ->
-            view.findNavController().navigate(R.id.action_homeFragment_to_profileActivity)
-        }
+        val btnCategory: Button = view.findViewById(R.id.btn_category)
+        btnCategory.setOnClickListener(this)
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        _binding = null
+    override fun onClick(v: View) {
+        if (v.id == R.id.btn_category) {
+            /*
+            Method addToBackStack akan menambahkan fragment ke backstack
+            Behaviour dari back button :
+            jika ada fragment di dalam backstack maka fragment yang akan di close / remove
+            jika sudah tidak ada fragment di dalam backstack maka activity yang akan di close / finish
+             */
+            val mCategoryFragment = CategoryFragment()
+            val mFragmentManager = parentFragmentManager
+            mFragmentManager.commit {
+                addToBackStack(null)
+                replace(R.id.frame_container, mCategoryFragment, CategoryFragment::class.java.simpleName)
+            }
+        }
     }
 
 }

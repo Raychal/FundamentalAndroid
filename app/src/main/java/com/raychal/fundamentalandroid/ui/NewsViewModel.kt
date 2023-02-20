@@ -1,8 +1,10 @@
 package com.raychal.fundamentalandroid.ui
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.raychal.fundamentalandroid.data.NewsRepository
 import com.raychal.fundamentalandroid.data.source.local.entity.NewsEntity
+import kotlinx.coroutines.launch
 
 class NewsViewModel(private val newsRepository: NewsRepository) : ViewModel() {
 
@@ -11,10 +13,14 @@ class NewsViewModel(private val newsRepository: NewsRepository) : ViewModel() {
     fun getBookmarkedNews() = newsRepository.getBookmarkedNews()
 
     fun saveNews(news: NewsEntity) {
-        newsRepository.setBookmarkedNews(news, true)
+        viewModelScope.launch {
+            newsRepository.setNewsBookmark(news, true)
+        }
     }
 
     fun deleteNews(news: NewsEntity) {
-        newsRepository.setBookmarkedNews(news, false)
+        viewModelScope.launch {
+            newsRepository.setNewsBookmark(news, false)
+        }
     }
 }

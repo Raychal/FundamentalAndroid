@@ -1,19 +1,21 @@
 plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
+    id 'kotlin-kapt'
 }
 
 android {
-    compileSdk 32
+    compileSdk 33
 
     defaultConfig {
         applicationId "com.raychal.fundamentalandroid"
         minSdk 24
-        targetSdk 32
+        targetSdk 33
         versionCode 1
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        buildConfigField("String", "APP_ID", '"a03cc70072a9768f03b985b7764a20ce"')
     }
 
     buildTypes {
@@ -29,6 +31,9 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
     }
+    buildFeatures {
+        viewBinding true
+    }
 }
 
 dependencies {
@@ -40,4 +45,11 @@ dependencies {
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
+
+    implementation "androidx.work:work-runtime:2.5.0"
+    implementation 'androidx.work:work-runtime-ktx:2.7.1'
+    implementation 'com.loopj.android:android-async-http:1.4.10'
+    implementation "com.squareup.moshi:moshi-kotlin:1.11.0"
+    kapt 'com.squareup.moshi:moshi-kotlin-codegen:1.8.0'
+
 }
